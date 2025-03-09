@@ -1,0 +1,45 @@
+@model TaskManagmentSystem.Models.Task
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Create Task</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Name" class="form-label">Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter a name"/>
+                            <!--<span asp-validation-for="Name" class="text-danger"></span>-->
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Status" class="form-label">Status</label>
+                            <select class="form-control">
+                                @foreach (var status in Enum.GetValues(typeof(TaskManagmentSystem.Models.Status)))
+                                {
+                                    <option value="@status">@status</option>
+                                }
+                            </select>
+                        </div>
+                        <!--<div class="form-group mb-3">
+                            <label asp-for="Created" class="form-label">Created</label>
+                            <input asp-for="Created" class="form-control" type="date"/>
+                            <span asp-validation-for="Created" class="text-danger"></span>
+                        </div>-->
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a asp-asp-controller="Tasks" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
