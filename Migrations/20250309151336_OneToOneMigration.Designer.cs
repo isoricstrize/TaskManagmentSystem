@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagmentSystem.Data;
 
@@ -10,27 +11,14 @@ using TaskManagmentSystem.Data;
 namespace TaskManagmentSystem.Migrations
 {
     [DbContext(typeof(TaskManagmentContext))]
-    partial class TaskManagmentContextModelSnapshot : ModelSnapshot
+    [Migration("20250309151336_OneToOneMigration")]
+    partial class OneToOneMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
-
-            modelBuilder.Entity("TagTask", b =>
-                {
-                    b.Property<int>("TagsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TagsId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("TagTask");
-                });
 
             modelBuilder.Entity("TaskManagmentSystem.Models.Tag", b =>
                 {
@@ -62,12 +50,7 @@ namespace TaskManagmentSystem.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
@@ -112,30 +95,6 @@ namespace TaskManagmentSystem.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TagTask", b =>
-                {
-                    b.HasOne("TaskManagmentSystem.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskManagmentSystem.Models.Task", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TaskManagmentSystem.Models.Task", b =>
-                {
-                    b.HasOne("TaskManagmentSystem.Models.User", "User")
-                        .WithMany("Tasks")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TaskManagmentSystem.Models.TaskDetail", b =>
                 {
                     b.HasOne("TaskManagmentSystem.Models.Task", "Task")
@@ -148,11 +107,6 @@ namespace TaskManagmentSystem.Migrations
             modelBuilder.Entity("TaskManagmentSystem.Models.Task", b =>
                 {
                     b.Navigation("TaskDetail");
-                });
-
-            modelBuilder.Entity("TaskManagmentSystem.Models.User", b =>
-                {
-                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

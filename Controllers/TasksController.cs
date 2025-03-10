@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TaskManagmentSystem.Data;
 using TaskManagmentSystem.Models;
 using Task = TaskManagmentSystem.Models.Task;
@@ -16,7 +17,12 @@ namespace TaskManagmentSystem.Controllers
 
         public IActionResult Index()
         {
-            List<Task> tasks = _db.Tasks.ToList();
+            List<Task> tasks = _db.Tasks
+                .Include(d => d.TaskDetail)
+                .Include(u => u.User)
+                .Include(t => t.Tags)
+                    //.ThenInclude(t => t.Name)
+                .ToList();
 
             return View(tasks);
         }
@@ -30,10 +36,10 @@ namespace TaskManagmentSystem.Controllers
         [HttpPost] // on form submit in Create.cshtml
         public IActionResult Create(Task obj)
         {
-            /*if (obj != null && obj.Name.Length < 3)
+            if (obj != null)
             {
-                ModelState.AddModelError("Title","Title too short");
-            }*/
+                obj.Tags = obj.Tags.Where(t => !string.IsNullOrEmpty(t.Name)).ToList();
+            }
 
             if (ModelState.IsValid)
             {

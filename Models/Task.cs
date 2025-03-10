@@ -14,10 +14,10 @@ namespace TaskManagmentSystem.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Task name is required.")]
         [StringLength(30,MinimumLength = 3, ErrorMessage = "Name must be between 3 and 30 Characters!")]
         public string Name { get; set; } = string.Empty;
-        
+
         public Status Status { get; set; } = Status.Pending;
 
 
@@ -26,7 +26,11 @@ namespace TaskManagmentSystem.Models
 
 
         // Relationship with User (One-to-Many) - Dependent (child)
-        //public int? UserId { get; set; }
-        //public User? User{ get; set; }
+        public int? UserId { get; set; }
+        public User? User{ get; set; }
+
+
+        // Relationship with Tag (Many-to-Many)   
+        public ICollection<Tag> Tags { get; set; } = [];
     }
 }

@@ -13,22 +13,34 @@
                         <div class="form-group mb-3">
                             <label asp-for="Name" class="form-label">Name</label>
                             <input asp-for="Name" class="form-control" placeholder="Enter a name"/>
-                            <!--<span asp-validation-for="Name" class="text-danger"></span>-->
                         </div>
                         <div class="form-group mb-3">
                             <label asp-for="Status" class="form-label">Status</label>
-                            <select class="form-control">
+                            <select asp-for="Status" class="form-control">
                                 @foreach (var status in Enum.GetValues(typeof(TaskManagmentSystem.Models.Status)))
                                 {
-                                    <option value="@status">@status</option>
+                                    <option value="@status">
+                                        @status
+                                    </option>
                                 }
                             </select>
                         </div>
-                        <!--<div class="form-group mb-3">
-                            <label asp-for="Created" class="form-label">Created</label>
-                            <input asp-for="Created" class="form-control" type="date"/>
-                            <span asp-validation-for="Created" class="text-danger"></span>
-                        </div>-->
+                        <div class="form-group mb-3">
+                            <label asp-for="TaskDetail.DueDate" class="form-label">Due Date</label>
+                            <input asp-for="TaskDetail.DueDate" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")"/>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="User.Name" class="form-label">User</label>
+                            <input asp-for="User.Name" class="form-control" placeholder="Enter a user name"/>
+                        </div>
+                         <div class="form-group mb-3">
+                            <label asp-for="Tags" class="form-label">Tags</label>
+                            <div id="tagsContainer">
+                                <input name="Tags[0].Name" class="form-control mb-1" placeholder="Enter first tag"/>
+                                <input name="Tags[1].Name" class="form-control mb-1" placeholder="Enter second tag"/>
+                                <input name="Tags[2].Name" class="form-control" placeholder="Enter third tag"/>
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-primary">Create</button>
                             <a asp-asp-controller="Tasks" asp-action="Index" class="btn btn-secondary">Cancel</a>
@@ -39,6 +51,7 @@
         </div>
     </div>
 </div>
+
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />

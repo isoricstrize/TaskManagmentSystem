@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagmentSystem.Data;
 
@@ -10,27 +11,14 @@ using TaskManagmentSystem.Data;
 namespace TaskManagmentSystem.Migrations
 {
     [DbContext(typeof(TaskManagmentContext))]
-    partial class TaskManagmentContextModelSnapshot : ModelSnapshot
+    [Migration("20250310101427_OneToManyMigration")]
+    partial class OneToManyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
-
-            modelBuilder.Entity("TagTask", b =>
-                {
-                    b.Property<int>("TagsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TasksId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TagsId", "TasksId");
-
-                    b.HasIndex("TasksId");
-
-                    b.ToTable("TagTask");
-                });
 
             modelBuilder.Entity("TaskManagmentSystem.Models.Tag", b =>
                 {
@@ -110,21 +98,6 @@ namespace TaskManagmentSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TagTask", b =>
-                {
-                    b.HasOne("TaskManagmentSystem.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskManagmentSystem.Models.Task", null)
-                        .WithMany()
-                        .HasForeignKey("TasksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("TaskManagmentSystem.Models.Task", b =>

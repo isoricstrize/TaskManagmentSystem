@@ -8,7 +8,7 @@ namespace TaskManagmentSystem.Models
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Due date is required.")]
         public DateTime DueDate { get; set; }
 
         public string Description { get; set; } = string.Empty;

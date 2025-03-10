@@ -24,10 +24,10 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <!--<th>Assigned User</th>-->
+                <th>Assigned User</th>
                 <th>Status</th>
-                <!--<th>Due Date</th>-->
-                <!--<th>Tags</th>-->
+                <th>Due Date</th>
+                <th>Tags</th>
                 <!--<th>Actions</th>-->
             </tr>
         </thead>
@@ -36,8 +36,10 @@
             {
                 <tr>
                     <td>@task.Name</td>
+                    <td>@task.User?.Name</td>
                     <td>@task.Status</td>
-                    <!--<td>task.TaskDetail?.DueDate</td>-->
+                    <td>@task.TaskDetail?.DueDate.ToString("dd/MM/yyyy")</td>
+                    <td>@string.Join(", ", task.Tags.Select(t => t.Name))</td>
                     <!--<td>
                         <a asp-controller="DiaryEntries" asp-action="Edit" asp-route-id="" class="btn btn-primary btn-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
