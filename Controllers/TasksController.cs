@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TaskManagmentSystem.Data;
 using TaskManagmentSystem.Models;
 using Task = TaskManagmentSystem.Models.Task;
@@ -30,15 +32,37 @@ namespace TaskManagmentSystem.Controllers
         // Called with "Create new task" button
         public IActionResult Create()
         {
+            //ViewBag.Users = new SelectList(_db.Users,"Id", "Name");
+            ViewBag.Users = _db.Users
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id.ToString(),  // This is the value submitted
+                    Text = u.Name              // This is displayed in the dropdown
+                })
+                .ToList();
+
             return View();
         }
 
         [HttpPost] // on form submit in Create.cshtml
         public IActionResult Create(Task obj)
         {
+            if (!ModelState.IsValid) // Fix for bug: After User validation error ViewBag is empty
+            {
+                ViewBag.Users = _db.Users
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id.ToString(),  
+                    Text = u.Name             
+                })
+                .ToList();
+
+                return View(obj);
+            }  
+            
             if (obj != null)
             {
-                obj.Tags = obj.Tags.Where(t => !string.IsNullOrEmpty(t.Name)).ToList();
+                obj.Tags = obj.Tags.Where(t => !string.IsNullOrEmpty(t.Name)).ToList(); // removing empty tags from tags list
             }
 
             if (ModelState.IsValid)

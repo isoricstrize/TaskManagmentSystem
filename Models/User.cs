@@ -8,7 +8,7 @@ namespace TaskManagmentSystem.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "User name is required.")]
-        [StringLength(30,MinimumLength = 3, ErrorMessage = "Name must be between 3 and 30 Characters!")]
+        [StringLength(30,MinimumLength = 3, ErrorMessage = "User name must be between 3 and 30 Characters!")]
         public string Name { get; set; } = string.Empty;
 
 
