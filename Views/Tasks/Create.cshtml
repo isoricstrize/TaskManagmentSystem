@@ -9,12 +9,13 @@
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <!--<div asp-validation-summary="All" class="text-danger"></div>-->
 
                         <!---------------------- NAME ---------------------->
                         <div class="form-group mb-3">
                             <label asp-for="Name" class="form-label">Name</label>
                             <input asp-for="Name" class="form-control" placeholder="Enter a name"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <!---------------------- STATUS ---------------------->
@@ -34,28 +35,36 @@
                         <div class="form-group mb-3">
                             <label asp-for="TaskDetail.DueDate" class="form-label">Due Date</label>
                             <input asp-for="TaskDetail.DueDate" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")"/>
+                            <span asp-validation-for="TaskDetail.DueDate" class="text-danger"></span>
                         </div>
 
                         <!---------------------- USER ---------------------->
                         <div class="form-group mb-3">
-                            <label asp-for="User.Name" class="form-label">User</label>
+                            <label asp-for="UserId" class="form-label">User</label>
                             <div class="">
-                                <select id="existingUser" class="form-control" asp-items="ViewBag.Users">
+                                <select id="existingUser" class="form-control" asp-items="ViewBag.Users" asp-for="UserId">
                                     <option value="">-- Select user --</option>
                                 </select>
                             </div>
                             <div class="d-none">
-                                <input id="hiddenSelectedUser" class="form-control" asp-for="User.Name" />
+                                <input id="hiddenSelectedUser" class="form-control" />
                             </div>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
                         </div>
                         
                         <!---------------------- TAGS ---------------------->
                          <div class="form-group mb-3">
                             <label asp-for="Tags" class="form-label">Tags</label>
+                            <!--<div id="tagsContainer">
+                                <input name="Tags[0].Name" class="form-control mb-1" placeholder="Enter first tag" value=""/>
+                                <input name="Tags[1].Name" class="form-control mb-1" placeholder="Enter second tag" value=""/>
+                                <input name="Tags[2].Name" class="form-control" placeholder="Enter third tag" value=""/>
+                            </div>---------------------->
                             <div id="tagsContainer">
-                                <input name="Tags[0].Name" class="form-control mb-1" placeholder="Enter first tag"/>
-                                <input name="Tags[1].Name" class="form-control mb-1" placeholder="Enter second tag"/>
-                                <input name="Tags[2].Name" class="form-control" placeholder="Enter third tag"/>
+                                @for (int i = 0; i < 3; i++)
+                                {
+                                    <input name="Tags[@i].Name" class="form-control mb-1" placeholder="Enter tag @i" />
+                                }
                             </div>
                         </div>
 
@@ -78,11 +87,11 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+    // TODO DELETE!
     document.getElementById("existingUser").addEventListener("change", function() {
         let selectedOption = this.options[this.selectedIndex]; 
         let hiddenUserInput = document.getElementById("hiddenSelectedUser");
-        hiddenUserInput.value = (selectedOption.text === "-- Select user --") ? "" : selectedOption.text;
-        //hiddenUserInput.value = selectedOption.value ? selectedOption.text : ""; TODO- after cleaning DB and removing select user form DB
+        hiddenUserInput.value = this.value;//(selectedOption.text === "-- Select user --") ? "" : selectedOption.text;
     });
 </script>
 

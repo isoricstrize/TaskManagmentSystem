@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagmentSystem.Data;
 
@@ -10,9 +11,11 @@ using TaskManagmentSystem.Data;
 namespace TaskManagmentSystem.Migrations
 {
     [DbContext(typeof(TaskManagmentContext))]
-    partial class TaskManagmentContextModelSnapshot : ModelSnapshot
+    [Migration("20250313104619_AddAnnotationChanges")]
+    partial class AddAnnotationChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
@@ -131,8 +134,7 @@ namespace TaskManagmentSystem.Migrations
                 {
                     b.HasOne("TaskManagmentSystem.Models.User", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -141,8 +143,7 @@ namespace TaskManagmentSystem.Migrations
                 {
                     b.HasOne("TaskManagmentSystem.Models.Task", "Task")
                         .WithOne("TaskDetail")
-                        .HasForeignKey("TaskManagmentSystem.Models.TaskDetail", "TaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TaskManagmentSystem.Models.TaskDetail", "TaskId");
 
                     b.Navigation("Task");
                 });

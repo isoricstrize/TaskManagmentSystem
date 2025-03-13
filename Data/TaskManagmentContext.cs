@@ -22,13 +22,15 @@ namespace TaskManagmentSystem.Data
                 .HasOne(e => e.TaskDetail)
                 .WithOne(e => e.Task)
                 .HasForeignKey<TaskDetail>(e => e.TaskId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade deletes TaskDetail when Task is deleted
 
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Tasks)
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull); // Set UserId to NULL after deletion of user
 
             modelBuilder.Entity<Tag>()
                 .HasMany(e => e.Tasks)
