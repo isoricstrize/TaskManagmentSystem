@@ -23,7 +23,6 @@ namespace TaskManagmentSystem.Controllers
                 .Include(d => d.TaskDetail)
                 .Include(u => u.User)
                 .Include(t => t.Tags)
-                    //.ThenInclude(t => t.Name)
                 .ToList();
 
             return View(tasks);
@@ -33,6 +32,7 @@ namespace TaskManagmentSystem.Controllers
         public IActionResult Create()
         {
             ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // for drop down list of users
+            ViewBag.Tags = new SelectList(_db.Tags,"Id", "Name");
 
             return View();
         }

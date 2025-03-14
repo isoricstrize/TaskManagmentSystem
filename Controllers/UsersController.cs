@@ -39,10 +39,7 @@ namespace TaskManagmentSystem.Controllers
                 var existingUser = _db.Users.FirstOrDefault(u => u.Name == newUser.Name);
                 if (existingUser != null)
                 {
-                    // Add error to ModelState if user exists
-                    ModelState.AddModelError("Name", "This user already exists.");
                     TempData["ErrorMessage"] = newUser.Name + " already exists. \n Please enter new user name.";
-                    //return View(newUser); // Return the view with error
                     return RedirectToAction("Index");
                 }
 
@@ -63,6 +60,7 @@ namespace TaskManagmentSystem.Controllers
 
             return RedirectToAction("Index");
         }
+        
 
         [HttpPost]
         public IActionResult Delete(int id)

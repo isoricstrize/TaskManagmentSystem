@@ -55,17 +55,41 @@
                         <!---------------------- TAGS ---------------------->
                          <div class="form-group mb-3">
                             <label asp-for="Tags" class="form-label">Tags</label>
+                            <!--foreach (var tag in ViewBag.Tags)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="tag@tag.Value" /></td>
+                                    <td>tag.Text</td>
+                                </tr>
+                            }--->
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Item</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var tag in ViewBag.Tags)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" name="tag@tag.Value" /></td>
+                                            <td>@tag.Text</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                             <!--<div id="tagsContainer">
                                 <input name="Tags[0].Name" class="form-control mb-1" placeholder="Enter first tag" value=""/>
                                 <input name="Tags[1].Name" class="form-control mb-1" placeholder="Enter second tag" value=""/>
                                 <input name="Tags[2].Name" class="form-control" placeholder="Enter third tag" value=""/>
-                            </div>---------------------->
-                            <div id="tagsContainer">
-                                @for (int i = 0; i < 3; i++)
-                                {
-                                    <input name="Tags[@i].Name" class="form-control mb-1" placeholder="Enter tag @i" />
-                                }
                             </div>
+                            <div id="tagsContainer">
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    <input name="Tags[i].Name" class="form-control mb-1" placeholder="Enter tag (i+1)" />
+                                }
+                            </div>---------------------->
                         </div>
 
 

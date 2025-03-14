@@ -25,9 +25,63 @@ namespace TaskManagmentSystem.Controllers
         }
 
         // Called with "Create new task" button
-        public IActionResult Create()
+        /*public IActionResult Create()
         {
             return View();
+        }*/
+
+        [HttpPost]
+        public IActionResult Create(Tag newTag)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check if the tag already exists based on name
+                var existingTag = _db.Tags.FirstOrDefault(t => t.Name == newTag.Name);
+                if (existingTag != null)
+                {
+                    TempData["ErrorMessage"] = newTag.Name + " already exists. \n Please enter new tag name.";
+                    return RedirectToAction("Index");
+                }
+
+                _db.Tags.Add(newTag);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            if (newTag.Name == null)
+            {
+                TempData["ErrorMessage"] = "Tag name is required.";
+            } 
+            else if (newTag.Name.Length < 3 || newTag.Name.Length > 30) 
+            {
+                TempData["ErrorMessage"] = "Tag name must be between 3 and 30 Characters.";
+            }
+
+            return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var tag = _db.Tags.Find(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            _db.Tags.Remove(tag);
+            _db.SaveChanges();
+            
+            return RedirectToAction("Index"); // Redirect after deletion
+        }
+
+
     }
 }
