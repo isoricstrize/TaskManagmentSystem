@@ -32,23 +32,31 @@ namespace TaskManagmentSystem.Controllers
         public IActionResult Create()
         {
             ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // for drop down list of users
-            ViewBag.Tags = new SelectList(_db.Tags,"Id", "Name");
+            ViewBag.Tags = _db.Tags.Select(t => new SelectListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Name
+            }).ToList();
 
             return View();
         }
 
-        [HttpPost] // on form submit in Create.cshtml
-        public IActionResult Create(Task obj)
+        [HttpPost] // on form submit in Create.cshtml 
+        public IActionResult Create(Task obj, List<int>? tagsIdList = null) // tagsIdList same as name attribute in select!
         {   
             if (obj != null)
             {
-                obj.Tags = obj.Tags.Where(t => !string.IsNullOrEmpty(t.Name)).ToList(); // removing empty tags from tags list
-
                 if (obj.UserId.HasValue) // If UserId is provided, load the associated user
                 {
                     obj.User = _db.Users.FirstOrDefault(u => u.Id == obj.UserId.Value);
                 }
+
+                if (tagsIdList != null)
+                {
+                    obj.Tags = _db.Tags.Where(t => tagsIdList.Contains(t.Id)).ToList();
+                }
             }
+
 
             if (ModelState.IsValid)
             {
@@ -63,9 +71,13 @@ namespace TaskManagmentSystem.Controllers
             }
 
             ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // Fix for bug: After User validation error ViewBag is empty
+            ViewBag.Tags = _db.Tags.Select(t => new SelectListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Name
+            }).ToList();
             return View(obj);
         }
-
 
         // Called with task delete symbol
         /*[HttpGet]

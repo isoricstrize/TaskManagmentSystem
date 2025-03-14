@@ -65,7 +65,7 @@ namespace TaskManagmentSystem.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            if (id == null || id == 0)
+            if (id == 0)
             {
                 return NotFound();
             }

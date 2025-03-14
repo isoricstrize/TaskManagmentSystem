@@ -13,14 +13,14 @@
 
                         <!---------------------- NAME ---------------------->
                         <div class="form-group mb-3">
-                            <label asp-for="Name" class="form-label">Name</label>
+                            <label asp-for="Name" class="form-label"><strong>Name</strong></label>
                             <input asp-for="Name" class="form-control" placeholder="Enter a name"/>
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <!---------------------- STATUS ---------------------->
                         <div class="form-group mb-3">
-                            <label asp-for="Status" class="form-label">Status</label>
+                            <label asp-for="Status" class="form-label"><strong>Status</strong></label>
                             <select asp-for="Status" class="form-control">
                                 @foreach (var status in Enum.GetValues(typeof(TaskManagmentSystem.Models.Status)))
                                 {
@@ -33,14 +33,14 @@
 
                         <!---------------------- DUE DATE ---------------------->
                         <div class="form-group mb-3">
-                            <label asp-for="TaskDetail.DueDate" class="form-label">Due Date</label>
+                            <label asp-for="TaskDetail.DueDate" class="form-label"><strong>Due Date</strong></label>
                             <input asp-for="TaskDetail.DueDate" class="form-control" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")"/>
                             <span asp-validation-for="TaskDetail.DueDate" class="text-danger"></span>
                         </div>
 
                         <!---------------------- USER ---------------------->
                         <div class="form-group mb-3">
-                            <label asp-for="UserId" class="form-label">User</label>
+                            <label asp-for="UserId" class="form-label"><strong>User</strong></label>
                             <div class="">
                                 <select id="existingUser" class="form-control" asp-items="ViewBag.Users" asp-for="UserId">
                                     <option value="">-- Select user --</option>
@@ -54,42 +54,12 @@
                         
                         <!---------------------- TAGS ---------------------->
                          <div class="form-group mb-3">
-                            <label asp-for="Tags" class="form-label">Tags</label>
-                            <!--foreach (var tag in ViewBag.Tags)
-                            {
-                                <tr>
-                                    <td><input type="checkbox" name="tag@tag.Value" /></td>
-                                    <td>tag.Text</td>
-                                </tr>
-                            }--->
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Select</th>
-                                        <th>Item</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var tag in ViewBag.Tags)
-                                    {
-                                        <tr>
-                                            <td><input type="checkbox" name="tag@tag.Value" /></td>
-                                            <td>@tag.Text</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            <!--<div id="tagsContainer">
-                                <input name="Tags[0].Name" class="form-control mb-1" placeholder="Enter first tag" value=""/>
-                                <input name="Tags[1].Name" class="form-control mb-1" placeholder="Enter second tag" value=""/>
-                                <input name="Tags[2].Name" class="form-control" placeholder="Enter third tag" value=""/>
-                            </div>
-                            <div id="tagsContainer">
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    <input name="Tags[i].Name" class="form-control mb-1" placeholder="Enter tag (i+1)" />
-                                }
-                            </div>---------------------->
+                            <label asp-for="Tags" class="form-label"><strong>Tags</strong></label>
+                            <select id="tagsDropdown" name="tagsIdList" asp-items="ViewBag.Tags" multiple="multiple" class="form-control"></select>
+
+                            <button type="button" id="showTagsBtn" class="btn btn-secondary mt-2 btn-sm">Add tags</button>
+
+                            <p>Selected Tags: <span id="selectedTagsDisplay" class="mt-2">None</span></p>
                         </div>
 
 
@@ -112,11 +82,24 @@
 
     <script>
     // TODO DELETE!
-    document.getElementById("existingUser").addEventListener("change", function() {
+    document.getElementById("existingTag").addEventListener("change", function() {
         let selectedOption = this.options[this.selectedIndex]; 
         let hiddenUserInput = document.getElementById("hiddenSelectedUser");
         hiddenUserInput.value = this.value;//(selectedOption.text === "-- Select user --") ? "" : selectedOption.text;
     });
 </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectElement = document.getElementById("tagsDropdown");
+            const displayElement = document.getElementById("selectedTagsDisplay");
+            const button = document.getElementById("showTagsBtn");
+
+            button.addEventListener("click", function () {
+                const selectedOptions = [...selectElement.selectedOptions].map(option => option.text);
+                displayElement.textContent = selectedOptions.length ? selectedOptions.join(", ") : "None";
+            });
+        });
+    </script>
 
 }
