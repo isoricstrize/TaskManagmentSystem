@@ -11,7 +11,7 @@ namespace TaskManagmentSystem.Models
         [Required(ErrorMessage = "Due date is required.")]
         public DateTime DueDate { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
 
 
         // One-to-One Relationship with Task - Dependent (child)     

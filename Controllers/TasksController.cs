@@ -51,12 +51,16 @@ namespace TaskManagmentSystem.Controllers
                     obj.User = _db.Users.FirstOrDefault(u => u.Id == obj.UserId.Value);
                 }
 
+                if (obj.TaskDetail.Description == null)
+                {
+                    obj.TaskDetail.Description = "";
+                }
+
                 if (tagsIdList != null)
                 {
                     obj.Tags = _db.Tags.Where(t => tagsIdList.Contains(t.Id)).ToList();
                 }
             }
-
 
             if (ModelState.IsValid)
             {
@@ -76,6 +80,113 @@ namespace TaskManagmentSystem.Controllers
                 Value = t.Id.ToString(),
                 Text = t.Name
             }).ToList();
+            return View(obj);
+        }
+
+        // Called on View button
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Task? task= _db.Tasks.Find(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            if (task.UserId.HasValue) // If UserId is provided, load the associated user
+            {
+                task.User = _db.Users.FirstOrDefault(u => u.Id == task.UserId.Value);
+            }
+
+            task.Tags = _db.Tasks
+                .Where(t => t.Id == id)
+                .SelectMany(t => t.Tags)
+                .ToList();
+
+            task.TaskDetail = _db.TaskDetails.FirstOrDefault(t => t.TaskId == id);
+
+            ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // for drop down list of users
+            ViewBag.Tags = new MultiSelectList(_db.Tags, "Id", "Name");
+            ViewBag.SelectedTags = task.Tags.Select(tt => tt.Id).ToList(); // Preselected Tags
+
+            return View(task);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Task obj, List<int>? tagsIdList = null)
+        {
+            if (obj != null)
+            {
+                if (obj.UserId.HasValue) // If UserId is provided, load the associated user
+                {
+                    obj.User = _db.Users.FirstOrDefault(u => u.Id == obj.UserId.Value);
+                }
+                
+                if (obj.TaskDetail.Description == null)
+                {
+                    obj.TaskDetail.Description = "";
+                }
+
+                /*
+                    This existingTask is a tracked entity because you retrieved it using EF Core. 
+                    Since weused _db.Tasks.Include(...), EF Core automatically tracks changes made to existingTask 
+                    and calling SaveChanges() will persist those changes to the db without needing Update() or Add() call. 
+                */
+                var existingTask = _db.Tasks
+                    .Include(t => t.Tags)
+                    .Include(t => t.TaskDetail)
+                    .FirstOrDefault(t => t.Id == obj.Id);
+
+                if (existingTask == null)
+                {
+                    return NotFound("Task not found.");
+                }
+
+                existingTask.Name = obj.Name;
+                existingTask.Status = obj.Status;
+                if (existingTask.TaskDetail != null)
+                {
+                    existingTask.TaskDetail = obj.TaskDetail;
+                }
+
+                // Get the list of selected tags
+                var selectedTags = _db.Tags
+                    .Where(t => tagsIdList.Contains(t.Id))
+                    .ToList();
+
+                // Update Task-Tags Relationship
+                existingTask.Tags = selectedTags; // Directly assign the updated tags list
+
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            /*if (ModelState.IsValid)
+            {
+                _db.Tasks.Update(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }    
+
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine(error.ErrorMessage); // Log error messages
+            }
+
+            ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // Fix for bug: After User validation error ViewBag is empty
+            ViewBag.Tags = _db.Tags.Select(t => new SelectListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Name
+            }).ToList();*/
+
             return View(obj);
         }
 

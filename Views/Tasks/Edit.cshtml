@@ -5,11 +5,10 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h2>Create Task</h2>
+                    <h2>View / Edit Task</h2>
                 </div>
                 <div class="card-body">
-                    <form asp-action="Create" method="post">
-                        <!--<div asp-validation-summary="All" class="text-danger"></div>-->
+                    <form asp-action="Edit" method="post">
 
                         <!---------------------- NAME ---------------------->
                         <div class="form-group mb-3">
@@ -41,9 +40,7 @@
                         <!---------------------- DESCRIPTION ---------------------->
                         <div class="form-group mb-3">
                             <label asp-for="TaskDetail.Description"></label>
-                            <textarea asp-for="TaskDetail.Description" class="form-control">
-                                @(Model?.TaskDetail?.Description ?? "")
-                            </textarea>
+                            <textarea asp-for="TaskDetail.Description" class="form-control"></textarea>
                         </div>
 
                         <!---------------------- USER ---------------------->
@@ -72,10 +69,11 @@
 
 
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
                             <a asp-asp-controller="Tasks" asp-action="Index" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -89,15 +87,6 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-    // TODO DELETE!
-    document.getElementById("existingTag").addEventListener("change", function() {
-        let selectedOption = this.options[this.selectedIndex]; 
-        let hiddenUserInput = document.getElementById("hiddenSelectedUser");
-        hiddenUserInput.value = this.value;//(selectedOption.text === "-- Select user --") ? "" : selectedOption.text;
-    });
-</script>
-
-    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const selectElement = document.getElementById("tagsDropdown");
             const displayElement = document.getElementById("selectedTagsDisplay");
@@ -107,6 +96,19 @@
                 const selectedOptions = [...selectElement.selectedOptions].map(option => option.text);
                 displayElement.textContent = selectedOptions.length ? selectedOptions.join(", ") : "None";
             });
+
+
+            var preselectedTags = @Html.Raw(Json.Serialize(ViewBag.SelectedTags));
+            if (selectElement) {
+                for (var i = 0; i < selectElement.options.length; i++) {
+                    if (preselectedTags.includes(parseInt(selectElement.options[i].value))) {
+                        selectElement.options[i].selected = true;
+                    }
+                }
+                const selectedOptions = [...selectElement.selectedOptions].map(option => option.text);
+                displayElement.textContent = selectedOptions.length ? selectedOptions.join(", ") : "None";
+            }
+
         });
     </script>
 

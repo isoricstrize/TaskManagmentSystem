@@ -46,7 +46,7 @@
                     <td>@string.Join(", ", task.Tags.Select(t => t.Name))</td>
                     <td>
                         <a asp-controller="Tasks" asp-action="Edit" asp-route-id="@task.Id" class="btn btn-primary btn-sm">
-                            Edit
+                            View
                         </a>
                         <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-@task.Id">
                             Delete
