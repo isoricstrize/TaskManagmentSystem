@@ -97,7 +97,7 @@
                 displayElement.textContent = selectedOptions.length ? selectedOptions.join(", ") : "None";
             });
 
-
+            // Loading preselectedTags tagsDropdown from existingTask
             var preselectedTags = @Html.Raw(Json.Serialize(ViewBag.SelectedTags));
             if (selectElement) {
                 for (var i = 0; i < selectElement.options.length; i++) {

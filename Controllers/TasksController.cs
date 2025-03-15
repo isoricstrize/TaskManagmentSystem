@@ -127,11 +127,17 @@ namespace TaskManagmentSystem.Controllers
                 {
                     obj.User = _db.Users.FirstOrDefault(u => u.Id == obj.UserId.Value);
                 }
-                
+
                 if (obj.TaskDetail.Description == null)
                 {
                     obj.TaskDetail.Description = "";
                 }
+
+
+                // Get the list of selected tags
+                var selectedTags = _db.Tags
+                    .Where(t => tagsIdList.Contains(t.Id))
+                    .ToList();
 
                 /*
                     This existingTask is a tracked entity because you retrieved it using EF Core. 
@@ -141,6 +147,7 @@ namespace TaskManagmentSystem.Controllers
                 var existingTask = _db.Tasks
                     .Include(t => t.Tags)
                     .Include(t => t.TaskDetail)
+                    .Include(u => u.User)
                     .FirstOrDefault(t => t.Id == obj.Id);
 
                 if (existingTask == null)
@@ -150,42 +157,14 @@ namespace TaskManagmentSystem.Controllers
 
                 existingTask.Name = obj.Name;
                 existingTask.Status = obj.Status;
-                if (existingTask.TaskDetail != null)
-                {
-                    existingTask.TaskDetail = obj.TaskDetail;
-                }
-
-                // Get the list of selected tags
-                var selectedTags = _db.Tags
-                    .Where(t => tagsIdList.Contains(t.Id))
-                    .ToList();
-
-                // Update Task-Tags Relationship
-                existingTask.Tags = selectedTags; // Directly assign the updated tags list
+                existingTask.TaskDetail = obj.TaskDetail;
+                existingTask.User = obj.User;
+                existingTask.Tags = selectedTags;
 
                 _db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
-
-            /*if (ModelState.IsValid)
-            {
-                _db.Tasks.Update(obj);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }    
-
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine(error.ErrorMessage); // Log error messages
-            }
-
-            ViewBag.Users = new SelectList(_db.Users,"Id", "Name"); // Fix for bug: After User validation error ViewBag is empty
-            ViewBag.Tags = _db.Tags.Select(t => new SelectListItem
-            {
-                Value = t.Id.ToString(),
-                Text = t.Name
-            }).ToList();*/
 
             return View(obj);
         }
