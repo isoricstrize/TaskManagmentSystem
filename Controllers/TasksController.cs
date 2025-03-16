@@ -17,13 +17,32 @@ namespace TaskManagmentSystem.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
             List<Task> tasks = _db.Tasks
                 .Include(d => d.TaskDetail)
                 .Include(u => u.User)
                 .Include(t => t.Tags)
                 .ToList();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    tasks = tasks.OrderByDescending(t => t.Name).ToList();
+                    break;
+                case "Date":
+                    tasks = tasks.OrderBy(t => t.TaskDetail.DueDate).ToList();
+                    break;
+                case "date_desc":
+                    tasks = tasks.OrderByDescending(t => t.TaskDetail.DueDate).ToList();
+                    break;
+                default:
+                    tasks = tasks.OrderBy(t => t.Name).ToList();
+                    break;
+            }
+
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
             return View(tasks);
         }

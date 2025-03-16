@@ -23,10 +23,18 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">
+                        Name
+                    </a>
+                </th>
                 <th>Assigned User</th>
                 <th>Status</th>
-                <th>Due Date</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">
+                        Due Date
+                    </a>  
+                </th>
                 <th>Tags</th>
                 <th>Actions</th>
             </tr>
