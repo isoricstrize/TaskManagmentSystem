@@ -39,7 +39,7 @@ namespace TaskManagmentSystem.Controllers
                 var existingTag = _db.Tags.FirstOrDefault(t => t.Name == newTag.Name);
                 if (existingTag != null)
                 {
-                    TempData["ErrorMessage"] = newTag.Name + " already exists. \n Please enter new tag name.";
+                    TempData["ErrorMsgNewTag"] = newTag.Name + " already exists. \n Please enter new tag name.";
                     return RedirectToAction("Index");
                 }
 
@@ -51,11 +51,11 @@ namespace TaskManagmentSystem.Controllers
 
             if (newTag.Name == null)
             {
-                TempData["ErrorMessage"] = "Tag name is required.";
+                TempData["ErrorMsgNewTag"] = "Tag name is required.";
             } 
             else if (newTag.Name.Length < 3 || newTag.Name.Length > 30) 
             {
-                TempData["ErrorMessage"] = "Tag name must be between 3 and 30 Characters.";
+                TempData["ErrorMsgNewTag"] = "Tag name must be between 3 and 30 Characters.";
             }
 
             return RedirectToAction("Index");
@@ -80,6 +80,45 @@ namespace TaskManagmentSystem.Controllers
             _db.SaveChanges();
             
             return RedirectToAction("Index"); // Redirect after deletion
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, string newTagName)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var tag = _db.Tags.Find(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            if (newTagName == null)
+            {
+                TempData["ErrorMsgEditTag"] = "Tag name is required.";
+                return RedirectToAction("Index");
+            } 
+            else if (newTagName.Length < 3 || newTagName.Length > 30) 
+            {
+                TempData["ErrorMsgEditTag"] = "Tag name must be between 3 and 30 Characters.";
+                return RedirectToAction("Index");
+            }
+
+            // Check if the user already exists based on name
+            var existingTag = _db.Users.FirstOrDefault(t => t.Name == newTagName && t.Id != id);
+            if (existingTag != null)
+            {
+                TempData["ErrorMsgEditTag"] = newTagName + " already exists. \n Please enter new tag name.";
+                return RedirectToAction("Index");
+            }
+
+            tag.Name = newTagName;
+            _db.Tags.Update(tag);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
 

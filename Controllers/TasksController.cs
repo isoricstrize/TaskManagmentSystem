@@ -17,13 +17,19 @@ namespace TaskManagmentSystem.Controllers
             _db = db;
         }
 
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(string sortOrder, string searchString)
         {
             List<Task> tasks = _db.Tasks
                 .Include(d => d.TaskDetail)
                 .Include(u => u.User)
                 .Include(t => t.Tags)
                 .ToList();
+
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(t => t.Name.Contains(searchString)).ToList();
+            }
 
             switch (sortOrder)
             {

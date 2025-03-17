@@ -9,9 +9,9 @@
             <h2>Users</h2>
         </div>
         <div class="col-6  text-end">
-            @if (TempData["ErrorMessage"] != null)
+            @if (TempData["ErrorMsgNewUser"] != null)
             {
-               <span id="errorMessage" class="text-danger">@TempData["ErrorMessage"]</span>
+               <span id="errorMessage" class="text-danger">@TempData["ErrorMsgNewUser"]</span>
             }
             <form asp-controller="Users" asp-action="Create" method="post">
                 <div class="form-group mb-3">
@@ -27,19 +27,32 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
-                <th>Action</th>
+                <th>
+                    Edit
+                    @if (TempData["ErrorMsgEditUser"] != null)
+                    {
+                        <span id="errorMessageEdit" class="text-danger">@TempData["ErrorMsgEditUser"]</span>
+                    }
+                </th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             @foreach(var user in Model)
             {
                 <tr>
-                    <td>@user.Id</td>
                     <td>@user.Name</td>
                     <td>
-                        <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-@user.Id">
+                        <form asp-controller="Users" asp-action="Edit" asp-route-id="@user.Id" method="post">
+                            <div class="form-actions no-color d-flex gap-2">
+                                <input type="text" id="editUser" name="newUserName" class="form-control flex-grow-1" placeholder="Enter new user name" required />
+                                <button type="submit" class="btn btn-secondary btn-sm">Edit</button>       
+                            </div>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@user.Id">
                             Delete
                         </a>
 
@@ -81,5 +94,14 @@
                 errorMessage.style.display = "none"; // Hide the error message when typing
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            let errorMessage = document.getElementById("errorMessageEdit");
+            if (errorMessage) {
+                errorMessage.style.display = "none";
+            }
+        }, 3000);
+    });
     </script>
 }

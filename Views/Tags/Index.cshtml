@@ -9,9 +9,9 @@
             <h2>Tags</h2>
         </div>
         <div class="col-6  text-end">
-            @if (TempData["ErrorMessage"] != null)
+            @if (TempData["ErrorMsgNewTag"] != null)
             {
-               <span id="errorMessage" class="text-danger">@TempData["ErrorMessage"]</span>
+               <span id="errorMessage" class="text-danger">@TempData["ErrorMsgNewTag"]</span>
             }
             <form asp-controller="Tags" asp-action="Create" method="post">
                 <div class="form-group mb-3">
@@ -27,17 +27,30 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
-                <th>Action</th>
+                <th>
+                    Edit
+                    @if (TempData["ErrorMsgEditTag"] != null)
+                    {
+                        <span id="errorMessageEdit" class="text-danger">@TempData["ErrorMsgEditTag"]</span>
+                    }
+                </th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             @foreach(var tag in Model)
             {
                 <tr>
-                    <td>@tag.Id</td>
                     <td>@tag.Name</td>
+                    <td>
+                        <form asp-controller="Tags" asp-action="Edit" asp-route-id="@tag.Id" method="post">
+                            <div class="form-actions no-color d-flex gap-2">
+                                <input type="text" id="editTag" name="newTagName" class="form-control flex-grow-1" placeholder="Enter new tag name" required />
+                                <button type="submit" class="btn btn-secondary btn-sm">Edit</button>       
+                            </div>
+                        </form>
+                    </td>
                     <td>
                         <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-@tag.Id">
                             Delete
@@ -81,5 +94,14 @@
                 errorMessage.style.display = "none"; // Hide the error message when typing
             }
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            let errorMessage = document.getElementById("errorMessageEdit");
+            if (errorMessage) {
+                errorMessage.style.display = "none";
+            }
+        }, 3000);
+    });
     </script>
 }

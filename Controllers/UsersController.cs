@@ -39,7 +39,7 @@ namespace TaskManagmentSystem.Controllers
                 var existingUser = _db.Users.FirstOrDefault(u => u.Name == newUser.Name);
                 if (existingUser != null)
                 {
-                    TempData["ErrorMessage"] = newUser.Name + " already exists. \n Please enter new user name.";
+                    TempData["ErrorMsgNewUser"] = newUser.Name + " already exists. \n Please enter new user name.";
                     return RedirectToAction("Index");
                 }
 
@@ -51,11 +51,11 @@ namespace TaskManagmentSystem.Controllers
 
             if (newUser.Name == null)
             {
-                TempData["ErrorMessage"] = "User name is required.";
+                TempData["ErrorMsgNewUser"] = "User name is required.";
             } 
             else if (newUser.Name.Length < 3 || newUser.Name.Length > 30) 
             {
-                TempData["ErrorMessage"] = "User name must be between 3 and 30 Characters.";
+                TempData["ErrorMsgNewUser"] = "User name must be between 3 and 30 Characters.";
             }
 
             return RedirectToAction("Index");
@@ -65,7 +65,7 @@ namespace TaskManagmentSystem.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            if (id == null || id == 0)
+            if (id == 0)
             {
                 return NotFound();
             }
@@ -81,5 +81,46 @@ namespace TaskManagmentSystem.Controllers
             
             return RedirectToAction("Index"); // Redirect after deletion
         }
+
+
+        [HttpPost]
+        public IActionResult Edit(int id, string newUserName)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var user = _db.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (newUserName == null)
+            {
+                TempData["ErrorMsgEditUser"] = "User name is required.";
+                return RedirectToAction("Index");
+            } 
+            else if (newUserName.Length < 3 || newUserName.Length > 30) 
+            {
+                TempData["ErrorMsgEditUser"] = "User name must be between 3 and 30 Characters.";
+                return RedirectToAction("Index");
+            }
+
+            // Check if the user already exists based on name
+            var existingUser = _db.Users.FirstOrDefault(u => u.Name == newUserName && u.Id != id);
+            if (existingUser != null)
+            {
+                TempData["ErrorMsgEditUser"] = newUserName + " already exists. \n Please enter new user name.";
+                return RedirectToAction("Index");
+            }
+
+            user.Name = newUserName;
+            _db.Users.Update(user);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 }
