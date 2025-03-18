@@ -22,7 +22,7 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>Database diagram</summary>
 <br>
 
-![Database diagram](documentation/databaseDiagram.png)
+![Database diagram](Documentation/databaseDiagram.png)
 </details>
 
 ## Screenshots
@@ -32,7 +32,7 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>Shows all tasks with sorting and filtering options.</summary>
 <br>
 
-![Database diagram](documentation/taskList.png)
+![Database diagram](Documentation/taskList.png)
 </details>
 
 ### Task Creation Form
@@ -40,7 +40,7 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>Create a new task by filling out the form.</summary>
 <br>
 
-![Database diagram](documentation/taskCreate.png)
+![Database diagram](Documentation/taskCreate.png)
 </details>
 
 ### Task View/Edit Form
@@ -48,7 +48,7 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>View and edit task details, including due dates, descriptions and assigned tags.</summary>
 <br>
 
-![Database diagram](documentation/taskViewEdit.png)
+![Database diagram](Documentation/taskViewEdit.png)
 </details>
 
 ### Users Page
@@ -56,7 +56,7 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>Displays a list of all users with options to add, edit, or delete them.</summary>
 <br>
 
-![Database diagram](documentation/users.png)
+![Database diagram](Documentation/users.png)
 </details>
 
 ### Tags Page
@@ -64,5 +64,5 @@ A Task Management System can be used to track tasks, their details, associated t
 <summary>Displays a list of all tags with options to add, edit, or delete them.</summary>
 <br>
 
-![Database diagram](documentation/tags.png)
+![Database diagram](Documentation/tags.png)
 </details>
