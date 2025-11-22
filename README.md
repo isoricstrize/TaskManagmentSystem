@@ -1,6 +1,14 @@
 # Task Management System
 A Task Management System can be used to track tasks, their details, associated tags and assigned users. The system allows users to create, update, and manage tasks, including due dates and task statuses.
 
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET-8-blueviolet?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/ASP.NET%20Core-MVC-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/SQLite-DB-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/EF_Core-ORM-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/CRUD-Operations-yellow?style=for-the-badge" />
+</p>
+
 ## Features
 - **Task Creation & Management:** Users can create tasks with a name, status and description.
 - **Task Details:** Each task can have additional details like due dates and descriptions.
